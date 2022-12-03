@@ -1,3 +1,10 @@
+// check username, password in post(login) request
+// if it exists, create a new JWT
+// send back to front-end
+
+// setup authentication so only teh request with JWT can access the dashboard.
+
+
 const login = async (req, res) => {
   res.send('Login/Register/Signup Route')
 }
