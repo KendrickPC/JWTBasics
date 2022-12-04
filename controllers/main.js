@@ -36,13 +36,20 @@ const dashboard = async (req, res) => {
   }
   
   const token = authHeaders.split(' ')[1];
-  console.log("TOKEN!: ", token);
+  // console.log("TOKEN!: ", token);
 
-  // Set up verification stage now.
+  // Set up for verification stage:
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    console.log("decoded!!!!!: ", decoded);
+    const luckyNumber = Math.floor(Math.random() * 100)
+    res.status(200).json({msg: `Hello ${decoded.username}`, secret: `Authorized data, your lucky number is ${luckyNumber}`})
 
-  const luckyNumber = Math.floor(Math.random() * 100)
-  
-  res.status(200).json({msg: 'Hello Kenjamin Button', secret: `Authorized data, your lucky number is ${luckyNumber}`})
+  } catch(err) {
+    throw new CustomAPIError('Not authorized to access this route', 401)
+  }
+
+
 }
 
 module.exports = {
