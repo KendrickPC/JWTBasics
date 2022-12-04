@@ -21,14 +21,27 @@ const login = async (req, res) => {
   // Dummy id usually obtained from a database.
   const id = new Date().getDate()
   // In production, use long & complex & unhackable string values!
-  const token = jwt.sign({id, username}, )
+  const token = jwt.sign({id, username}, process.env.JWT_SECRET, {expiresIn: '30d'})
 
-  console.log(username, password);
-  res.send('Login/Register/Signup Route')
+  // console.log(username, password);
+  // res.send('Login/Register/Signup Route')
+  res.status(200).json({msg: 'user created', token})
 }
 
 const dashboard = async (req, res) => {
+  const authHeaders = req.headers.authorization;
+  // console.log(req.headers.authorization);
+  if (!authHeaders || !authHeaders.startsWith('Bearer ')) {
+    throw new CustomAPIError('No TOKEN PROVIDED', 401)
+  }
+  
+  const token = authHeaders.split(' ')[1];
+  console.log("TOKEN!: ", token);
+
+  // Set up verification stage now.
+
   const luckyNumber = Math.floor(Math.random() * 100)
+  
   res.status(200).json({msg: 'Hello Kenjamin Button', secret: `Authorized data, your lucky number is ${luckyNumber}`})
 }
 
